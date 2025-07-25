@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Epileptic Seizure Prediction</title>
+  <style>
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      color: #2c3e50;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    main {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      padding: 2.5rem 3.5rem;
+      user-select: none;
+    }
+    h1 {
+      margin: 0 0 2rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+      text-align: center;
+      color: #34495e;
+      letter-spacing: 0.03em;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    /* Grid container for inputs */
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 2.2rem 2rem;
+    }
+    /* Each label + input as a flex column */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #34495e;
+      margin-bottom: 0.55rem;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      padding: 0.75rem 1.2rem;
+      font-size: 1.05rem;
+      border: 1.8px solid #cbd5e0;
+      border-radius: 6px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 8px rgba(49, 130, 206, 0.4);
+      background-color: #f0f9ff;
+    }
+    button[type="submit"] {
+      margin-top: 2.5rem;
+      padding: 0.9rem 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      background-color: #3182ce;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      box-shadow: 0 4px 12px rgba(49, 130, 206, 0.35);
+      width: 100%;
+    }
+    button[type="submit"]:hover,
+    button[type="submit"]:focus {
+      background-color: #2c7bbf;
+      box-shadow: 0 6px 16px rgba(44, 123, 191, 0.55);
+      outline: none;
+    }
+    #result {
+      margin-top: 1.8rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      min-height: 1.6em;
+      user-select: text;
+      transition: color 0.3s ease;
+    }
+    /* Accessibility: better focus visible */
+    input[type="number"]:focus-visible,
+    button[type="submit"]:focus-visible {
+      outline: 2px solid #3182ce;
+      outline-offset: 2px;
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      main {
+        padding: 2rem 2.5rem;
+        max-width: 100%;
+      }
+      .input-grid {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        gap: 1.8rem 1.6rem;
+      }
+    }
+    @media (max-width: 400px) {
+      .input-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem 0;
+      }
+    }
+    /* Screen reader only helper */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  </style>
+</head>
+<body>
+  <main role="main" aria-labelledby="pageTitle">
+    <h1 id="pageTitle">Epileptic Seizure Prediction</h1>
+    <form id="predictionForm" novalidate>
+      <div class="input-grid">
+        <div class="input-group">
+          <label for="val1">FP1-F7:</label>
+          <input
+            type="number"
+            id="val1"
+            name="val1"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            aria-describedby="val1-desc"
+            placeholder="Enter value"
+          />
+          <span id="val1-desc" class="sr-only">Numeric value for FP1-F7</span>
+        </div>
+        <div class="input-group">
+          <label for="val2">C3-P3:</label>
+          <input
+            type="number"
+            id="val2"
+            name="val2"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+        <div class="input-group">
+          <label for="val3">P3-O1:</label>
+          <input
+            type="number"
+            id="val3"
+            name="val3"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+        <div class="input-group">
+          <label for="val4">P4-O2:</label>
+          <input
+            type="number"
+            id="val4"
+            name="val4"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+        <div class="input-group">
+          <label for="val5">P7-O1:</label>
+          <input
+            type="number"
+            id="val5"
+            name="val5"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+        <div class="input-group">
+          <label for="val6">P7-T7:</label>
+          <input
+            type="number"
+            id="val6"
+            name="val6"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+        <div class="input-group">
+          <label for="val7">T8-P8-0:</label>
+          <input
+            type="number"
+            id="val7"
+            name="val7"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+        <div class="input-group">
+          <label for="val8">T8-P8-1:</label>
+          <input
+            type="number"
+            id="val8"
+            name="val8"
+            step="0.000000001"
+            inputmode="decimal"
+            required
+            placeholder="Enter value"
+          />
+        </div>
+      </div>
+      <button type="submit" aria-live="polite">Predict</button>
+    </form>
+    <div id="result" role="status" aria-live="polite" aria-atomic="true"></div>
+  </main>
+
+  <script>
+    (function () {
+      const form = document.getElementById('predictionForm');
+      const resultDiv = document.getElementById('result');
+      let clearTimeoutId = null;
+
+      // Format number to exactly 7 decimals
+      function formatTo7Decimals(value) {
+        const num = parseFloat(value);
+        if (isNaN(num)) return 0.0;
+        return parseFloat(num.toFixed(7));
+      }
+
+      // Show message with optional timeout (only for warnings/errors)
+      function showMessage(message, color, keepVisible = false) {
+        resultDiv.textContent = message;
+        resultDiv.style.color = color;
+
+        // Clear previous timeout if any
+        if (clearTimeoutId) {
+          clearTimeout(clearTimeoutId);
+          clearTimeoutId = null;
+        }
+
+        if (!keepVisible) {
+          clearTimeoutId = setTimeout(() => {
+            resultDiv.textContent = '';
+            clearTimeoutId = null;
+          }, 2000);
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        resultDiv.textContent = '';
+        resultDiv.style.color = '#2c3e50'; // default color
+
+        const inputs = [];
+
+        // Validate and format inputs
+        for (let i = 1; i <= 8; i++) {
+          const input = document.getElementById(`val${i}`);
+          if (!input.value.trim()) {
+            showMessage(`Please fill out the field: ${input.previousElementSibling.textContent}`, 'crimson');
+            input.focus();
+            return;
+          }
+
+          const formattedValue = formatTo7Decimals(input.value);
+          inputs.push(formattedValue);
+          input.value = formattedValue.toFixed(7);
+        }
+
+        try {
+          const response = await fetch('http://localhost:5000/predict', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ input_data: inputs }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Show prediction result indefinitely (no timeout)
+            const color = data.prediction === 0 ? '#e74c3c' : '#27ae60'; // red or green
+            showMessage(data.message || 'Prediction received.', color, true);
+          } else {
+            showMessage(data.error || 'An unexpected error occurred.', '#e74c3c');
+          }
+        } catch (error) {
+          showMessage('Network error or server is unreachable.', '#e74c3c');
+        }
+      });
+    })();
+  </script>
+
+  <style>
+    /* Screen reader only helper */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  </style>
+</body>
+</html>
